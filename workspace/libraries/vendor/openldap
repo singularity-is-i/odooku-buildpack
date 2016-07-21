@@ -9,7 +9,7 @@ curl -O http://download.oracle.com/berkeley-db/db-4.8.24.NC.tar.gz
 tar -zxvf db-4.8.24.NC.tar.gz
 pushd db-4.8.24.NC
 pushd build_unix
-../dist/configure --prefix=$OUT_PREFIXberkeleydb
+../dist/configure --prefix=${OUT_PREFIX}/berkeleydb
 make -s -j 9
 make install -s
 popd
@@ -20,7 +20,7 @@ echo "-----> Building Groff"
 curl -O ftp://ftp.gnu.org/gnu/groff/groff-1.21.tar.gz
 tar -zxvf groff-1.21.tar.gz
 pushd groff-1.21
-./configure --prefix=$OUT_PREFIXgroff
+./configure --prefix$(OUT_PREFIX)/groff
 make -s -j 9
 make install -s
 popd
@@ -31,9 +31,7 @@ echo "-----> Building openldap"
 curl -O http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.tgz
 tar -xvf openldap-2.4.44.tgz
 pushd openldap-2.4.44
-CPPFLAGS="-I$OUT_PREFIXberkeleydb/include ${CPPFLAGS}"; \
-  LDFLAGS="-L$OUT_PREFIXberkeleydb/lib ${LDFLAGS}"; \
-  ./configure --enable-bdb --enable-crypt --with-tls=openssl --prefix=$OUT_PREFIX/openldap
+CPPFLAGS="-I${OUT_PREFIX}/berkeleydb/include ${CPPFLAGS}" LDFLAGS="-L${OUT_PREFIX}/berkeleydb/lib ${LDFLAGS}" ./configure --enable-bdb --enable-crypt --with-tls=openssl --prefix=$OUT_PREFIX/openldap
 make -s -j 9
 make install -s
 popd
