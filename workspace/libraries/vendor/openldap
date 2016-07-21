@@ -2,12 +2,14 @@
 # Build Path: /app/.heroku/python/
 
 OUT_PREFIX=$1
+BERKELEYDB_VERSION=4.8.30.NC
+OPENLDAP_VERSION=2.4.44
 
 
-echo "-----> Building BerkeleyDB"
-curl -O http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
-tar -zxvf db-4.8.24.NC.tar.gz
-pushd db-4.8.24.NC
+echo "-----> Building BerkeleyDB ${BERKELEYDB_VERSION}"
+curl -O http://download.oracle.com/berkeley-db/db-${BERKELEYDB_VERSION}.tar.gz
+tar -zxvf db-${BERKELEYDB_VERSION}.tar.gz
+pushd db-${BERKELEYDB_VERSION}
 pushd build_unix
 ../dist/configure --prefix=${OUT_PREFIX}/berkeleydb
 make -s -j 9
@@ -16,10 +18,10 @@ popd
 popd
 
 
-echo "-----> Building openldap"
-curl -O http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.tgz
-tar -xvf openldap-2.4.44.tgz
-pushd openldap-2.4.44
+echo "-----> Building OpenLDAP ${OPENLDAP_VERSION}"
+curl -O http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${OPENLDAP_VERSION}.tgz
+tar -xvf openldap-${OPENLDAP_VERSION}.tgz
+pushd openldap-${OPENLDAP_VERSION}
 CPPFLAGS="-I${OUT_PREFIX}/berkeleydb/include ${CPPFLAGS}" LDFLAGS="-L${OUT_PREFIX}/berkeleydb/lib ${LDFLAGS}" ./configure --enable-bdb --enable-crypt --with-tls=openssl --prefix=${OUT_PREFIX}/openldap
 make depend
 make -s -j 9
