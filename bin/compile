@@ -3,10 +3,6 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
-[ "$BUILDPACK_XTRACE" ] && set -o xtrace
-
-DEFAULT_ODOO_ARCHIVE="https://github.com/odoo/odoo/archive/9.0.tar.gz"
-
 # Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
@@ -14,18 +10,11 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-VIRTUALENV_LOC=".heroku/venv"
-DEFAULT_PYTHON_VERSION="python-2.7.12"
-DEFAULT_PYTHON_STACK="cedar-14"
-PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="8.1.2"
-SETUPTOOLS_VERSION="23.1.0"
+# Syntax sugar.
+source $BIN_DIR/utils
 
-# Install Python.
-source $BIN_DIR/steps/python
+# We'll need to send these statics to other scripts we `source`.
+export BUILD_DIR CACHE_DIR BIN_DIR
 
-# Sanity check for setuptools/distribute.
-source $BIN_DIR/steps/setuptools
-
-# Uninstall removed dependencies with Pip.
-source $BIN_DIR/steps/pip-uninstall
+# Install openldap
+source $BIN_DIR/steps/openldap
