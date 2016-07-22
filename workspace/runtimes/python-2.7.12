@@ -7,7 +7,7 @@ PYTHON_VERSION=2.7.12
 
 echo "-----> Building Python ${PYTHON_VERSION}"
 curl -O https://python.org/ftp/python/2.7.12/Python-${PYTHON_VERSION}.tgz
-tar -xzf Python-${PYTHON_VERSION}.tgz
+tar -xvzf Python-${PYTHON_VERSION}.tgz
 pushd Python-${PYTHON_VERSION}
 ./configure --prefix=${OUT_PREFIX}
 make -s
