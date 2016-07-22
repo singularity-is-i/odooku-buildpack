@@ -5,7 +5,6 @@ source $BIN_DIR/utils
 
 # Install dependencies with Pip.
 puts-cmd "pip install -r odoo_requirements.txt"
-echo $(ls /app/.heroku)
 
 set +e
 CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" /app/.heroku/odoo/bin/pip install -r odoo_requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent

@@ -16,12 +16,20 @@ ENV_DIR=$3
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
 unset CYTOKINE_LOG_FILE GEM_PATH
+unset CFLAGS LDFLAGS
 
 # Syntax sugar.
 source $BIN_DIR/utils
 
+# Set new context.
+BUILD_DIR_ORIG=$BUILD_DIR
+BUILD_DIR=$APP_DIR
+
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
+
+# Create paths
+mkdir .heroku
 mkdir -p $(dirname $PROFILE_PATH)
 
 # We'll need to send these statics to other scripts we `source`.
@@ -35,17 +43,12 @@ export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/incl
 export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/odoo/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/odoo/lib:$LIBRARY_PATH
 export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/odoo/lib:$LD_LIBRARY_PATH
+export CFLAGS=-I/app/.heroku/vendor/include $CFLAGS
+export LDFLAGS=-L/app/.heroku/vendor/lib $LDFLAGS
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/odoo/lib/pkg-config:$PKG_CONFIG_PATH
 
 # Enter BUILD_DIR
 pushd $BUILD_DIR
-
-set +e
-# Create set-aside `.heroku` folder.
-mkdir .heroku &> /dev/null
-set -e
-
-mkdir -p $(dirname $PROFILE_PATH)
 
 # Install runtimes
 source $BIN_DIR/steps/runtimes/python
