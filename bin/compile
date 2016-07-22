@@ -12,14 +12,60 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+# Sanitizing environment variables.
+unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
+unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
+unset CYTOKINE_LOG_FILE GEM_PATH
+
 # Syntax sugar.
 source $BIN_DIR/utils
 
+# Set up outputs under new context
+PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+
 # We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
-# Install openldap
-source $BIN_DIR/steps/openldap
+# Prepend proper environment variables for Python use.
+export PATH=$BUILD_DIR/.heroku/odoo/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
+export PYTHONUNBUFFERED=1
+export LANG=en_US.UTF-8
+export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/odoo/include:$C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/odoo/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/odoo/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/odoo/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/odoo/lib/pkg-config:$PKG_CONFIG_PATH
 
-# Install
-# source $BIN_DIR/steps/pip-install
+# Enter BUILD_DIR
+pushd $BUILD_DIR
+
+set +e
+# Create set-aside `.heroku` folder.
+mkdir .heroku &> /dev/null
+set -e
+
+mkdir -p $(dirname $PROFILE_PATH)
+
+# Install runtimes
+source $BIN_DIR/steps/runtimes/python
+
+# Install libraries
+source $BIN_DIR/steps/libraries/sasl
+source $BIN_DIR/steps/libraries/openldap
+
+# Install requirements
+source $BIN_DIR/steps/pip-install
+
+# Leave
+popd
+
+# Create .profile script for application runtime environment variables.
+set-env PATH '$HOME/.heroku/odoo/bin:$PATH'
+set-env PYTHONUNBUFFERED true
+set-env PYTHONHOME /app/.heroku/odoo
+set-env LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/odoo/lib:$LIBRARY_PATH'
+set-env LD_LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/odoo/lib:$LD_LIBRARY_PATH'
+set-default-env LANG en_US.UTF-8
+set-default-env PYTHONHASHSEED random
+set-default-env PYTHONPATH /app/
