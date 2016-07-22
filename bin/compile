@@ -22,4 +22,4 @@ export BUILD_DIR CACHE_DIR BIN_DIR
 source $BIN_DIR/steps/openldap
 
 # Install
-source $BIN_DIR/steps/pip-install
+# source $BIN_DIR/steps/pip-install
