@@ -26,5 +26,5 @@ else
   export OPENLDAP=$(pwd)/vendor
 fi
 
-set-env CFLAGS "$CFLAGS -I/app/.heroku/vendor/include -I/app/.heroku/vendor/include/sasl"
-set-env LDFLAGS "$LDFLAGS -L/app/.heroku/vendor/lib"
+export CFLAGS="$CFLAGS -I/app/.heroku/vendor/include -I/app/.heroku/vendor/include/sasl"
+export LDFLAGS="$LDFLAGS -L/app/.heroku/vendor/lib"
