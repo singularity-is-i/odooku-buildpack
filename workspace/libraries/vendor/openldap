@@ -2,6 +2,13 @@
 # Build Path: /app/.heroku/python/
 
 OUT_PREFIX=$1
+
+
+# Use new path, containing autoconf.
+export PATH="/app/.heroku/python/bin/:$PATH"
+hash -r
+
+
 BERKELEYDB_VERSION=4.8.30.NC
 OPENLDAP_VERSION=2.4.44
 
