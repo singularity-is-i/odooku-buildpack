@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-VENDORED_OPENLDAP="https://odooku.s3.amazonaws.com/libraries/vendor/openldap.tar.gz"
+VENDORED="https://odooku.s3.amazonaws.com/libraries/vendor/openldap.tar.gz"
 
 # Syntax sugar.
 source $BIN_DIR/utils
@@ -10,7 +10,7 @@ else
   echo "-----> Bootstrapping openldap."
   mkdir -p .heroku/vendor
   # Download and extract openldap into target vendor directory.
-  curl $VENDORED_OPENLDAP -s | tar zxv -C .heroku/vendor &> /dev/null
+  curl $VENDORED -s | tar zxv -C .heroku/vendor &> /dev/null
 
   export OPENLDAP=$(pwd)/vendor
 fi

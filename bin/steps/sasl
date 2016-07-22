@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+VENDORED="https://odooku.s3.amazonaws.com/libraries/vendor/sasl.tar.gz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+if [ -f ".heroku/vendor/lib/sasl.so" ]; then
+  export SASL=$(pwd)/vendor
+else
+  echo "-----> Bootstrapping Cyrus SASL."
+  mkdir -p .heroku/vendor
+  # Download and extract openldap into target vendor directory.
+  curl $VENDORED -s | tar zxv -C .heroku/vendor &> /dev/null
+
+  export SASL=$(pwd)/vendor
+fi
