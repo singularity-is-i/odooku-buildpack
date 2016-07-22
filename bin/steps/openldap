@@ -25,6 +25,3 @@ else
 
   export OPENLDAP=$(pwd)/vendor
 fi
-
-export CFLAGS="$CFLAGS -I/app/.heroku/vendor/include -I/app/.heroku/vendor/include/sasl"
-export LDFLAGS="$LDFLAGS -L/app/.heroku/vendor/lib"
