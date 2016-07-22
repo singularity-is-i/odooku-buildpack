@@ -14,7 +14,7 @@ tar -zxvf db-${BERKELEYDB_VERSION}.tar.gz
 pushd db-${BERKELEYDB_VERSION}
 pushd build_unix
 ../dist/configure --prefix=${OUT_PREFIX}
-make -s -j 9
+make -s
 make install -s
 popd
 popd
@@ -29,6 +29,6 @@ CPPFLAGS="-I${OUT_PREFIX}include ${CPPFLAGS}" \
   LD_LIBRARY_PATH="../db-${BERKELEYDB_VERSION}/build_unix/.libs" \
   ./configure --enable-bdb --enable-crypt --with-tls=openssl --prefix=${OUT_PREFIX}
 make depend
-make -s -j 9
+make -s
 make install -s
 popd
