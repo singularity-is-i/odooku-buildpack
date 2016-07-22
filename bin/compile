@@ -24,5 +24,6 @@ export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 # Install openldap
 source $BIN_DIR/steps/openldap
 
+echo $CFLAGS
 echo "export CFLAGS=\"$CFLAGS\"" > $BUILD_DIR/export
 echo "export LDFLAGS=\"$LDFLAGS\"" >> $BUILD_DIR/export
