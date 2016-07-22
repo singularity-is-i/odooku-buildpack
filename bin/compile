@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Fail fast and fail hard.
-set -eo pipefail
+set -ex
 
 # Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path

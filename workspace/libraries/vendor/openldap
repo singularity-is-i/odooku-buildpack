@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 # Build Path: /app/.heroku/vendor/
 
-# Fail fast and fail hard.
-set -eo pipefail
-
 OUT_PREFIX=$1
 
 
