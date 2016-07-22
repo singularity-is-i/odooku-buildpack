@@ -4,17 +4,13 @@
 source $BIN_DIR/utils
 
 # Install dependencies with Pip.
-puts-cmd "pip install -r odoo.txt"
+puts-cmd "pip install -r odoo_requirements.txt"
 
 set +e
-CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" /app/.heroku/python/bin/pip install -r odoo.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" /app/.heroku/python/bin/pip install -r odoo_requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
 PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
 if [[ ! $PIP_STATUS -eq 0 ]]; then
     exit 1
 fi
-
-# Smart Requirements handling
-cat odoo.txt >> .heroku/python/requirements-declared.txt
-/app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
