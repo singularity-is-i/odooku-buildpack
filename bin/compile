@@ -1,6 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -ex
+# Fail fast and fail hard.
+set -eo pipefail
+
+[ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
 # Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
