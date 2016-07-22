@@ -7,7 +7,7 @@ source $BIN_DIR/utils
 puts-cmd "pip install -r odoo_requirements.txt"
 
 set +e
-CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" /app/.heroku/odoo/bin/pip install -r odoo_requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" .heroku/odoo/bin/pip install -r odoo_requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
 PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
