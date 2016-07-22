@@ -6,6 +6,17 @@ OUT_PREFIX=$1
 
 BERKELEYDB_VERSION=4.8.30.NC
 OPENLDAP_VERSION=2.4.44
+CYRUSSASL_VERSION=2.1.25
+
+
+echo "-----> Building Cyrus Sasl ${CYRUSSASL_VERSION}"
+curl -O ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-${CYRUSSASL_VERSION}.tar.gz
+tar -zxvf cyrus-sasl-${CYRUSSASL_VERSION}.tar.gz
+pushd cyrus-sasl-${CYRUSSASL_VERSION}
+./configure --prefix=${OUT_PREFIX}
+make -s
+make install -s
+popd
 
 
 echo "-----> Building BerkeleyDB ${BERKELEYDB_VERSION}"
