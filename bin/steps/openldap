@@ -10,14 +10,14 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled OpenLDAP binary.
-VENDORED_OPENLDAP="https://odooku.s3.amazonaws.com/$STACK/libraries/vendor/openldap.tar.gz"
+VENDORED_OPENLDAP="https://odooku.s3.amazonaws.com/libraries/vendor/openldap.tar.gz"
 
 PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
 source $BIN_DIR/utils
 
-if [ -f ".heroku/vendor/bin/openldap" ]; then
+if [ -f ".heroku/vendor/lib/libldap.so" ]; then
   export OPENLDAP=$(pwd)/vendor
 else
   echo "-----> Bootstrapping openldap."

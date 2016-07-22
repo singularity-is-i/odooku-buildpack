@@ -16,5 +16,11 @@ source $BIN_DIR/utils
 # We'll need to send these statics to other scripts we `source`.
 export BUILD_DIR CACHE_DIR BIN_DIR
 
+export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:$PKG_CONFIG_PATH
+
 # Install openldap
 source $BIN_DIR/steps/openldap
+
+
+#export CFLAGS="$CFLAGS -I/app/.heroku/vendor/include -I/app/.heroku/vendor/include/sasl"
+#export LDFLAGS="$LDFLAGS -L/app/.heroku/vendor/lib"
