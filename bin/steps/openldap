@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
-
-# This script serves as the OpenLDAP build step of the
-# [**Odooku Buildpack**](https://github.com/adaptivdesign/odooku-buildpack)
-# compiler.
-#
-# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
-# adapter between a Python application and Heroku's runtime.
-#
-# This script is invoked by [`bin/compile`](/).
-
-# The location of the pre-compiled OpenLDAP binary.
 VENDORED_OPENLDAP="https://odooku.s3.amazonaws.com/libraries/vendor/openldap.tar.gz"
 
 # Syntax sugar.

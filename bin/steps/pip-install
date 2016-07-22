@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
 # Install dependencies with Pip.
 puts-cmd "pip install -r odoo.txt"
 
@@ -15,4 +20,3 @@ fi
 # Smart Requirements handling
 cat odoo.txt >> .heroku/python/requirements-declared.txt
 /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
-echo
