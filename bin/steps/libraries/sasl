@@ -10,4 +10,4 @@ if [ ! -f ".heroku/vendor/lib/sasl.so" ]; then
   curl $ARCHIVE -s | tar zxv -C .heroku/vendor &> /dev/null
 fi
 
-export CFLAGS="$CFLAGS -I/app/.heroku/vendor/include/sasl"
+export CFLAGS="$CFLAGS -I$(pwd)/.heroku/vendor/include/sasl"
