@@ -13,8 +13,9 @@ Then, shell into an instance and run a build by giving the name of the formula i
 
     $ heroku run bash
     Running `bash` attached to terminal... up, run.6880
-    ~ $ bob build runtimes/python-2.7.12
-    ~ $ bob build libraries/vendor/openldap
+    ~ $ bob deploy runtimes/python-2.7.12
+    ~ $ bob deploy libraries/vendor/openldap
+    ~ $ bob deploy libraries/vendor/sasl
 
 If this works, run `bob deploy` instead of `bob build` to have the result uploaded to S3 for you.
 
