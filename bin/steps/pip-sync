@@ -5,6 +5,7 @@
 
 requirement_files=("odoo_requirements.txt")
 compiled=()
+echo `ls`
 for req in "${requirement_files[@]}"; do
   if [ -f "$req" ]; then
     # See if requirements exist
@@ -20,8 +21,6 @@ for req in "${requirement_files[@]}"; do
       if [[ ! $COMPILE_STATUS -eq 0 ]]; then
           exit 1
       fi
-    else
-      echo `ls`
     fi
   fi
 done
