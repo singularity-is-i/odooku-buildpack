@@ -6,10 +6,10 @@
 requirement_files=("odoo_requirements.txt")
 compiled=()
 for req in "${requirement_files[@]}"; do
-  # See if requirements exist
-  req_compiled="$BUILD_DIR/.heroku/odoo/$req.compiled"
-  compiled+="$req_compiled"
   if [ -f "$req" ]; then
+    # See if requirements exist
+    req_compiled=".heroku/odoo/$req.compiled"
+    compiled+="$req_compiled"
     if [ ! -f ".heroku/odoo/$req" ] || [ `md5 $req.txt` != `md5 .heroku/odoo/$req` ]; then
       puts-step "Compiling $req"
       set +e
@@ -20,6 +20,8 @@ for req in "${requirement_files[@]}"; do
       if [[ ! $COMPILE_STATUS -eq 0 ]]; then
           exit 1
       fi
+    else
+      echo `ls`
     fi
   fi
 done
