@@ -17,7 +17,7 @@ ODOOKU_DB_HOST="${ODOOKU_DB_HOST:-$DB_HOST}"
 ODOOKU_DB_PORT="${ODOOKU_DB_PORT:-$DB_PORT}"
 ODOOKU_DB_NAME="${ODOOKU_DB_NAME:-$DB_NAME}"
 
-options="--xmlrpc-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
+options="--no-database-list --xmlrpc-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
 if [ -v ODOOKU_ADDONS ]; then
   options="$options --addons-path $ODOOKU_ADDONS"
 fi
@@ -30,9 +30,9 @@ if [ -v ODOOKU_DB_PORT ]; then
   options="$options --db_port $ODOOKU_DB_PORT"
 fi
 
-#if [ -v ODOOKU_DB_NAME ]; then
-#options="$options -d $ODOOKU_DB_NAME"
-#fi
+if [ -v ODOOKU_DB_NAME ]; then
+  options="$options -d $ODOOKU_DB_NAME"
+fi
 
 if [ -v ODOOKU_DB_USER ]; then
   options="$options -r $ODOOKU_DB_USER"
