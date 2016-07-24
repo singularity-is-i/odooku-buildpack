@@ -25,8 +25,8 @@ export WARNINGS_LOG=$(mktemp)
 source $BIN_DIR/utils
 
 # Switch context to /app dir
-$BUILD_DIR_ORIG = $BUILD_DIR
-$BUILD_DIR = /app
+$BUILD_DIR_ORIG=$BUILD_DIR
+$BUILD_DIR="/app"
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
