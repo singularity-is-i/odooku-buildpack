@@ -9,6 +9,7 @@ if [[ $DATABASE_URL =~ ^postgres.* ]]; then
     ODOOKU_DB_NAME:=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:.*\/\(.*\)$/\1/')
 fi
 
+ODOOKU_PORT=$0
 ODOOKU_ADDONS:=""
 ODOOKU_DATA_DIR:="/tmp"
 ODOOKU_ADMIN_PASSWORD:=""
@@ -18,5 +19,5 @@ ODOOKU_AWS_ACCESS_KEY_SECRET:=""
 ODOOKU_S3_BUCKET:=""
 
 
-options="--addons-path $ODOOKU_ADDONS --data-dir $ODOOKU_DATA_DIR --db_host $ODOOKU_DB_HOST --db_port $ODOOKU_DB_PORT -d $ODOOKU_DB_NAME -r $ODOOKU_DB_USER -w $ODOOKU_DB_PASSWORD"
+options="--xmlrpc-port $ODOOKU_PORT --addons-path $ODOOKU_ADDONS --data-dir $ODOOKU_DATA_DIR --db_host $ODOOKU_DB_HOST --db_port $ODOOKU_DB_PORT -d $ODOOKU_DB_NAME -r $ODOOKU_DB_USER -w $ODOOKU_DB_PASSWORD"
 odoo.py $options

@@ -5,7 +5,7 @@ ARCHIVE=`head -n 1 odoo.txt`
 # Copy wrapper script
 cp $ROOT_DIR/lib/odooku .heroku/odoo/bin
 
-if [ ! -f ".heroku/odoo/addons" ]; then
+if [ ! -d ".heroku/odoo/addons" ]; then
   mkdir ./odoo_tmp
   curl -sL $ARCHIVE | tar xz -C ./odoo_tmp --strip 1
   pip install --no-cache-dir --no-dependencies ./odoo_tmp
@@ -13,7 +13,7 @@ if [ ! -f ".heroku/odoo/addons" ]; then
   rm -r ./odoo_tmp
 fi
 
-export ODOOKU_ADDONS=".heroku/odoo/lib/python2.7/site-packages/openerp/addons,.heroku/odoo/addons,$ODOOKU_ADDONS"
+export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons,$HOME/.heroku/odoo/addons,$ODOOKU_ADDONS"
 if [ ! -f "./addons" ]; then
   export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons"
 fi
