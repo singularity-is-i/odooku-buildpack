@@ -14,6 +14,7 @@ for req in "${requirement_files[@]}"; do
       puts-step "Compiling $req"
       set +e
       .heroku/odoo/bin/python -m piptools.scripts.compile $req -o $req_compiled
+      echo `cat $req_compiled`
       COMPILE_STATUS="${PIPESTATUS[0]}"
       set -e
       if [[ ! $COMPILE_STATUS -eq 0 ]]; then
@@ -25,7 +26,7 @@ done
 
 puts-step "Syncing $compiled"
 set +e
-.heroku/odoo/bin/python -m piptools.scripts.sync $compiled 2>&1
+.heroku/odoo/bin/python -m piptools.scripts.sync $compiled
 COMPILE_STATUS="${PIPESTATUS[0]}"
 set -e
 if [[ ! $COMPILE_STATUS -eq 0 ]]; then
