@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+ARCHIVE=https://github.com/odoo/odoo/archive/9.0.tar.gz
+
+if [ ! -f ".heroku/odoo/addons" ]; then
+  mkdir -p $CACHE_DIR/odoo
+  curl -sL $ARCHIVE | tar xz -C $CACHE_DIR/odoo --strip 1
+  pip install --no-cache-dir /tmp/odoo
+  mv $CACHE_DIR/odoo/addons .heroku/odoo/addons
+fi
