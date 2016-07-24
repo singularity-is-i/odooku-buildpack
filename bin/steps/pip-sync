@@ -24,7 +24,7 @@ for req in "${requirement_files[@]}"; do
   fi
 done
 
-puts-step "Syncing $compiled"
+puts-step "Syncing $BUILD_DIR/.heroku/odoo/odoo_requirements.txt.compiled"
 set +e
 .heroku/odoo/bin/python .heroku/odoo/bin/pip-sync $BUILD_DIR/.heroku/odoo/odoo_requirements.txt.compiled
 COMPILE_STATUS="${PIPESTATUS[0]}"
