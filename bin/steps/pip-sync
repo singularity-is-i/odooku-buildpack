@@ -13,7 +13,7 @@ for req in "${requirement_files[@]}"; do
     if [ ! -f ".heroku/odoo/$req" ] || [ `md5 $req.txt` != `md5 .heroku/odoo/$req` ]; then
       puts-step "Compiling $req"
       set +e
-      .heroku/odoo/bin/python .heroku/odoo/bin/pip-compile -v -o $req_compiled $req
+      pip-compile -o $req_compiled $req
       echo `cat $req_compiled`
       COMPILE_STATUS="${PIPESTATUS[0]}"
       set -e
@@ -24,9 +24,9 @@ for req in "${requirement_files[@]}"; do
   fi
 done
 
-puts-step "Syncing $BUILD_DIR/.heroku/odoo/odoo_requirements.txt.compiled"
+puts-step "Syncing $compiled"
 set +e
-.heroku/odoo/bin/python .heroku/odoo/bin/pip-sync $BUILD_DIR/.heroku/odoo/odoo_requirements.txt.compiled
+pip-sync  $compiled
 COMPILE_STATUS="${PIPESTATUS[0]}"
 set -e
 if [[ ! $COMPILE_STATUS -eq 0 ]]; then
