@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 ARCHIVE="https://odooku.s3.amazonaws.com/libraries/vendor/sasl.tar.gz"
 
-# Syntax sugar.
-source $BIN_DIR/utils
-
-if [ ! -f ".heroku/vendor/lib/sasl" ]; then
+if [ ! -f ".heroku/vendor/lib/libsasl2.so" ]; then
   puts-step "Bootstrapping Cyrus SASL."
   mkdir -p .heroku/vendor
   curl $ARCHIVE -s | tar zxv -C .heroku/vendor &> /dev/null

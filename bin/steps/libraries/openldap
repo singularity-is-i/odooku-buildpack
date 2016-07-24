@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 ARCHIVE="https://odooku.s3.amazonaws.com/libraries/vendor/openldap.tar.gz"
 
-# Syntax sugar.
-source $BIN_DIR/utils
-
 if [ ! -f ".heroku/vendor/lib/libldap.so" ]; then
   puts-step "Bootstrapping openLDAP."
   mkdir -p .heroku/vendor

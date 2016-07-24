@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-# Syntax sugar.
-source $BIN_DIR/utils
-
-ARCHIVE=https://github.com/odoo/odoo/archive/9.0.tar.gz
+ARCHIVE=`head -n 1 odoo.txt`
 
 if [ ! -f ".heroku/odoo/addons" ]; then
   mkdir ./odoo_tmp

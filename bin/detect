@@ -2,5 +2,9 @@
 
 BUILD_DIR=$1
 
-# No detection required
+# Exit early if app is clearly not an Odoo app.
+if [ ! -f $BUILD_DIR/odoo.txt ] || [ ! -f $BUILD_DIR/odoo_requirements.txt ]; then
+  exit 1
+fi
+
 echo Odoo

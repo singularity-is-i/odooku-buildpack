@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 ARCHIVE="https://odooku.s3.amazonaws.com/runtimes/python-2.7.12.tar.gz"
 
-# Syntax sugar.
-source $BIN_DIR/utils
-
 if [ ! -f ".heroku/odoo/bin/python" ]; then
   puts-step "Bootstrapping Python 2.7.12"
   mkdir -p .heroku/odoo
