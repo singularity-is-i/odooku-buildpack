@@ -53,8 +53,10 @@ pushd $BUILD_DIR
 
 # Install runtimes
 source $BIN_DIR/steps/runtimes/python
+# shebang for pip and other scripts point to:
 #!/app/.heroku/odoo//bin/python
-ln -s $BUILD_DIR/.heroku/odoo/bin/python /app/.heroku/odoo//bin/python
+mkdir -p /app/.heroku/odoo/bin
+ln -s $BUILD_DIR/.heroku/odoo/bin/python /app/.heroku/odoo/bin/python
 
 # Install libraries
 source $BIN_DIR/steps/libraries/sasl
