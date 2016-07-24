@@ -2,22 +2,44 @@
 
 # Parse heroku DATABASE_URL
 if [[ $DATABASE_URL =~ ^postgres.* ]]; then
-    ODOOKU_DB_USER:=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/\(.*\):.*@.*:.*\/.*$/\1/')
-    ODOOKU_DB_PASSWORD:=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:\(.*\)@.*:.*\/.*$/\1/')
-    ODOOKU_DB_HOST:=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@\(.*\):.*\/.*$/\1/')
-    ODOOKU_DB_PORT:=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:\(.*\)\/.*$/\1/')
-    ODOOKU_DB_NAME:=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:.*\/\(.*\)$/\1/')
+    DB_USER=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/\(.*\):.*@.*:.*\/.*$/\1/')
+    DB_PASSWORD=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:\(.*\)@.*:.*\/.*$/\1/')
+    DB_HOST=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@\(.*\):.*\/.*$/\1/')
+    DB_PORT=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:\(.*\)\/.*$/\1/')
+    DB_NAME=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:.*\/\(.*\)$/\1/')
 fi
 
 ODOOKU_PORT=$0
-ODOOKU_ADDONS:=""
-ODOOKU_DATA_DIR:="/tmp"
-ODOOKU_ADMIN_PASSWORD:=""
-ODOOKU_DEBUG:="0"
-ODOOKU_AWS_ACCESS_KEY_ID:=""
-ODOOKU_AWS_ACCESS_KEY_SECRET:=""
-ODOOKU_S3_BUCKET:=""
+ODOOKU_DATA_DIR="${ODOOKU_DATA_DIR:-'/tmp'}"
+ODOOKU_DB_USER="${ODOOKU_DB_USER:-$DB_USER}"
+ODOOKU_DB_PASSWORD="${ODOOKU_DB_PASSWORD:-$DB_PASSWORD}"
+ODOOKU_DB_HOST="${ODOOKU_DB_HOST:-$DB_HOST}"
+ODOOKU_DB_PORT="${ODOOKU_DB_PORT:-$DB_PORT}"
+ODOOKU_DB_NAME="${ODOOKU_DB_NAME:-$DB_NAME}"
 
+options="--xmlrpc-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
+if [ -v ODOOKU_ADDONS ]; then
+  options="$options --addons-path $ODOOKU_ADDONS"
+fi
 
-options="--xmlrpc-port $ODOOKU_PORT --addons-path $ODOOKU_ADDONS --data-dir $ODOOKU_DATA_DIR --db_host $ODOOKU_DB_HOST --db_port $ODOOKU_DB_PORT -d $ODOOKU_DB_NAME -r $ODOOKU_DB_USER -w $ODOOKU_DB_PASSWORD"
+if [ -v ODOOKU_DB_HOST ]; then
+  options="$options --db_host $ODOOKU_DB_HOST"
+fi
+
+if [ -v ODOOKU_DB_PORT ]; then
+  options="$options --db_port $ODOOKU_DB_PORT"
+fi
+
+if [ -v ODOOKU_DB_NAME ]; then
+  options="$options -d $ODOOKU_DB_NAME"
+fi
+
+if [ -v ODOOKU_DB_USER ]; then
+  options="$options -r $ODOOKU_DB_USER"
+fi
+
+if [ -v ODOOKU_DB_PASSWORD ]; then
+  options="$options -w $ODOOKU_DB_PASSWORD"
+fi
+
 odoo.py $options
