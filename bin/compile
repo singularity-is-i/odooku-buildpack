@@ -35,7 +35,7 @@ mkdir .heroku
 mkdir -p $CACHE_DIR
 
 # Restore cache
-cp -R $CACHE_DIR/.heroku/ $BUILD_DIR/.heroku/
+cp -R $CACHE_DIR/.heroku/ $BUILD_DIR/.heroku/ &> /dev/null || true
 
 mkdir -p $(dirname $PROFILE_PATH)
 
