@@ -30,9 +30,9 @@ if [ -v ODOOKU_DB_PORT ]; then
   options="$options --db_port $ODOOKU_DB_PORT"
 fi
 
-if [ -v ODOOKU_DB_NAME ]; then
-  options="$options -d $ODOOKU_DB_NAME"
-fi
+#if [ -v ODOOKU_DB_NAME ]; then
+#options="$options -d $ODOOKU_DB_NAME"
+#fi
 
 if [ -v ODOOKU_DB_USER ]; then
   options="$options -r $ODOOKU_DB_USER"
