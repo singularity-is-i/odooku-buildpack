@@ -3,7 +3,7 @@
 # Syntax sugar.
 # source $BIN_DIR/utils
 
-requirement_files=("requirements.txt" "odoo_requirements.txt")
+requirement_files=("odoo_requirements.txt")
 compiled=()
 for req in "${requirement_files[@]}"; do
   # See if requirements exist
