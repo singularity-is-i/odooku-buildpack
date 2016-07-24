@@ -30,6 +30,13 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
 
 # Create paths
 mkdir .heroku
+
+# Prepare the cache.
+mkdir -p $CACHE_DIR
+
+# Restore cache
+cp -R $CACHE_DIR/.heroku/ $BUILD_DIR/.heroku/
+
 mkdir -p $(dirname $PROFILE_PATH)
 
 # We'll need to send these statics to other scripts we `source`.
@@ -81,3 +88,8 @@ set-env LD_LIBRARY_PATH '$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib:$LD_LIB
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH '$HOME/'
+
+# Update cache
+rm -rf $CACHE_DIR/.heroku
+mkdir $CACHE_DIR/.heroku
+cp -R $BUILD_DIR/.heroku/ $CACHE_DIR/.heroku/
