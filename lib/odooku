@@ -9,7 +9,7 @@ if [[ $DATABASE_URL =~ ^postgres.* ]]; then
     DB_NAME=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:.*\/\(.*\)$/\1/')
 fi
 
-ODOOKU_PORT=$0
+ODOOKU_PORT="$1"
 ODOOKU_DATA_DIR="${ODOOKU_DATA_DIR:-'/tmp'}"
 ODOOKU_DB_USER="${ODOOKU_DB_USER:-$DB_USER}"
 ODOOKU_DB_PASSWORD="${ODOOKU_DB_PASSWORD:-$DB_PASSWORD}"
