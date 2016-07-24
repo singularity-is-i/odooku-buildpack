@@ -11,6 +11,7 @@ ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+APP_DIR="/app"
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
@@ -24,9 +25,9 @@ export WARNINGS_LOG=$(mktemp)
 # Syntax sugar.
 source $BIN_DIR/utils
 
-# Switch context to /app dir
-$BUILD_DIR_ORIG=$BUILD_DIR
-$BUILD_DIR="/app"
+# Switch context to APP_DIR
+ORIG_BUILD_DIR=$BUILD_DIR
+BUILD_DIR=$APP_DIR
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
