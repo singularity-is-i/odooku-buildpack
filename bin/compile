@@ -29,15 +29,11 @@ source $BIN_DIR/utils
 PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
 
 # Create paths
-mkdir .heroku
-
-# Prepare the cache.
-mkdir -p $CACHE_DIR
+mkdir -p $BUILD_DIR/.heroku
+mkdir -p $(dirname $PROFILE_PATH)
 
 # Restore cache
-cp -R $CACHE_DIR/.heroku/ $BUILD_DIR/.heroku/ &> /dev/null || true
-
-mkdir -p $(dirname $PROFILE_PATH)
+cp -a $CACHE_DIR/.heroku/. $BUILD_DIR/.heroku/ &> /dev/null || true
 
 # We'll need to send these statics to other scripts we `source`.
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
@@ -90,6 +86,6 @@ set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH '$HOME/'
 
 # Update cache
-rm -rf $CACHE_DIR/.heroku
-mkdir $CACHE_DIR/.heroku
-cp -R $BUILD_DIR/.heroku/ $CACHE_DIR/.heroku/
+rm -rf $CACHE_DIR/.heroku &> /dev/null || true
+mkdir -p $CACHE_DIR/.heroku
+cp -a $BUILD_DIR/.heroku/. $CACHE_DIR/.heroku/
