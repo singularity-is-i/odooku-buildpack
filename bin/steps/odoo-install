@@ -14,6 +14,6 @@ if [ ! -d ".heroku/odoo/addons" ]; then
 fi
 
 export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons,$HOME/.heroku/odoo/addons"
-if [ ! -f "./addons" ]; then
+if [ -d "./addons" ]; then
   export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons"
 fi
