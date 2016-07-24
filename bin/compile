@@ -33,9 +33,6 @@ mkdir -p $BUILD_DIR/.heroku
 mkdir -p $(dirname $PROFILE_PATH)
 
 # Restore cache
-ls $CACHE_DIR || true
-ls $CACHE_DIR/.heroku || true
-exit 1
 cp -a $CACHE_DIR/.heroku/. $BUILD_DIR/.heroku/ &> /dev/null || true
 
 # We'll need to send these statics to other scripts we `source`.
@@ -70,10 +67,10 @@ source $BIN_DIR/steps/libraries/sasl
 source $BIN_DIR/steps/libraries/openldap
 
 # Install requirements
-source $BIN_DIR/steps/pip-install
+# source $BIN_DIR/steps/pip-install
 
 # Install Odoo
-source $BIN_DIR/steps/odoo-install
+# source $BIN_DIR/steps/odoo-install
 
 # Leave
 popd
@@ -92,3 +89,5 @@ set-default-env PYTHONPATH '$HOME/'
 rm -rf $CACHE_DIR/.heroku &> /dev/null || true
 mkdir -p $CACHE_DIR/.heroku
 cp -a $BUILD_DIR/.heroku/. $CACHE_DIR/.heroku/
+ls $BUILD_DIR/.heroku/
+ls $CACHE_DIR/.heroku/
