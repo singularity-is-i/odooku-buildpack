@@ -33,6 +33,9 @@ mkdir -p $BUILD_DIR/.heroku
 mkdir -p $(dirname $PROFILE_PATH)
 
 # Restore cache
+ls $CACHE_DIR || true
+ls $CACHE_DIR/.heroku || true
+exit 1
 cp -a $CACHE_DIR/.heroku/. $BUILD_DIR/.heroku/ &> /dev/null || true
 
 # We'll need to send these statics to other scripts we `source`.

@@ -6,16 +6,13 @@ source $BIN_DIR/utils
 requirement_files=("odoo_requirements.txt" "requirements.txt")
 for req in "${requirement_files[@]}"; do
   if [ -f "$req" ]; then
-    if [ ! -f ".heroku/odoo/$req" ] || [ `md5 $req` != `md5 .heroku/odoo/$req` ]; then
-      puts-step "pip install -r $req"
-      set +e
-      pip install -r $req --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
-      PIP_STATUS="${PIPESTATUS[0]}"
-      set -e
-      if [[ ! $PIP_STATUS -eq 0 ]]; then
-          exit 1
-      fi
-      cp $req .heroku/odoo/$req
+    puts-step "pip install -r $req"
+    set +e
+    pip install -r $req --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+    PIP_STATUS="${PIPESTATUS[0]}"
+    set -e
+    if [[ ! $PIP_STATUS -eq 0 ]]; then
+        exit 1
     fi
   fi
 done
