@@ -64,7 +64,10 @@ source $BIN_DIR/steps/libraries/sasl
 source $BIN_DIR/steps/libraries/openldap
 
 # Install requirements
-source $BIN_DIR/steps/pip-sync
+source $BIN_DIR/steps/pip-install
+
+# Install Odoo
+source $BIN_DIR/steps/odoo-install
 
 # Leave
 popd

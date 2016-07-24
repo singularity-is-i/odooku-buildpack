@@ -14,4 +14,3 @@ make install -s
 popd
 
 PYTHONHOME=${OUT_PREFIX} ${OUT_PREFIX}/bin/python -m ensurepip
-PYTHONHOME=${OUT_PREFIX} ${OUT_PREFIX}/bin/pip install pip-tools
