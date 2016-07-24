@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+# source $BIN_DIR/utils
+
+requirement_files=("requirements.txt" "odoo_requirements.txt")
+compiled=()
+for req in "${requirement_files[@]}"; do
+  # See if requirements exist
+  req_compiled=".heroku/odoo/$req.compiled"
+  compiled+="$req_compiled"
+  if [ -f "$req" ]; then
+    if [ ! -f ".heroku/odoo/$req" ] || [ `md5 $req.txt` != `md5 .heroku/odoo/$req` ]; then
+      puts-step "Compiling $req"
+      set +e
+      .heroku/odoo/bin/python -m pip-compile $req -o $req_compiled 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+      COMPILE_STATUS="${PIPESTATUS[0]}"
+      set -e
+      if [[ ! $COMPILE_STATUS -eq 0 ]]; then
+          exit 1
+      fi
+    fi
+  fi
+done
+
+puts-step "Syncing $compiled"
+set +e
+.heroku/odoo/bin/python -m pip-sync $compiled 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+COMPILE_STATUS="${PIPESTATUS[0]}"
+set -e
+if [[ ! $COMPILE_STATUS -eq 0 ]]; then
+    exit 1
+fi

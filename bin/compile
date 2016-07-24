@@ -18,6 +18,9 @@ unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
 unset CYTOKINE_LOG_FILE GEM_PATH
 unset CFLAGS LDFLAGS
 
+# Common Problem Warnings
+export WARNINGS_LOG=$(mktemp)
+
 # Syntax sugar.
 source $BIN_DIR/utils
 
@@ -55,7 +58,7 @@ source $BIN_DIR/steps/libraries/sasl
 source $BIN_DIR/steps/libraries/openldap
 
 # Install requirements
-source $BIN_DIR/steps/pip-install
+source $BIN_DIR/steps/pip-sync
 
 # Leave
 popd
