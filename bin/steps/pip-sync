@@ -7,7 +7,7 @@ requirement_files=("odoo_requirements.txt")
 compiled=()
 for req in "${requirement_files[@]}"; do
   # See if requirements exist
-  req_compiled=".heroku/odoo/$req.compiled"
+  req_compiled="$BUILD_DIR/.heroku/odoo/$req.compiled"
   compiled+="$req_compiled"
   if [ -f "$req" ]; then
     if [ ! -f ".heroku/odoo/$req" ] || [ `md5 $req.txt` != `md5 .heroku/odoo/$req` ]; then
@@ -26,7 +26,7 @@ done
 
 puts-step "Syncing $compiled"
 set +e
-pip-sync .heroku/odoo/odoo_requirements.txt.compiled
+pip-sync $compiled
 COMPILE_STATUS="${PIPESTATUS[0]}"
 set -e
 if [[ ! $COMPILE_STATUS -eq 0 ]]; then
