@@ -51,7 +51,7 @@ export LDFLAGS=-L$BUILD_DIR/.heroku/vendor/lib $LDFLAGS
 export PKG_CONFIG_PATH=$BUILD_DIR/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/odoo/lib/pkg-config:$PKG_CONFIG_PATH
 
 # Set defaults
-ODOOKU_ADDONS=""
+export ODOOKU_ADDONS=""
 
 # Enter BUILD_DIR
 pushd $BUILD_DIR
