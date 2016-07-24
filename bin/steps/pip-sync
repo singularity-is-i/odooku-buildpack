@@ -26,7 +26,7 @@ done
 
 puts-step "Syncing $compiled"
 set +e
-.heroku/odoo/bin/python .heroku/odoo/bin/pip-sync .heroku/odoo/odoo_requirements.txt.compiled
+.heroku/odoo/bin/python .heroku/odoo/bin/pip-sync $BUILD_DIR/.heroku/odoo/odoo_requirements.txt.compiled
 COMPILE_STATUS="${PIPESTATUS[0]}"
 set -e
 if [[ ! $COMPILE_STATUS -eq 0 ]]; then
