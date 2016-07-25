@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+ARCHIVE=https://github.com/adaptivdesign/odooku-compat/archive/master.tar.gz
+
+mkdir ./odoo_tmp
+curl -sL $ARCHIVE | tar xz -C ./odoo_tmp --strip 1
+pip install --upgrade --no-cache-dir ./odoo_tmp
+rm -r ./odoo_tmp
+
+export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons"
