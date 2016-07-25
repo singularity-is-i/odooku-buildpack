@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-ARCHIVE_ODOO=`head -n 1 odoo.txt`
-ARCHIVE_COMPAT=https://github.com/adaptivdesign/odooku-compat/archive/master.tar.gz
+ARCHIVE_ODOO="https://github.com/odoo/odoo/archive/9.0.tar.gz"
+ARCHIVE_COMPAT="https://github.com/adaptivdesign/odooku-compat/archive/master.tar.gz"
 
 if [ ! -d ".heroku/odoo/addons" ]; then
   mkdir ./odoo_tmp ./compat_tmp
-  curl -sL $ARCHIVE | tar xz -C ./odoo_tmp --strip 1
+  curl -sL $ARCHIVE_ODOO | tar xz -C ./odoo_tmp --strip 1
   curl -sL $ARCHIVE_COMPAT | tar xz -C ./compat_tmp --strip 1
   cp -a ./compat_tmp/patch/. ./odoo_tmp/
   pip install --upgrade --no-cache-dir ./odoo_tmp
