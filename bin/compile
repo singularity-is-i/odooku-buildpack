@@ -72,7 +72,6 @@ source $BIN_DIR/steps/libraries/openldap
 source $BIN_DIR/steps/pip-install
 
 # Install Odoo
-source $BIN_DIR/steps/compat-install
 source $BIN_DIR/steps/odoo-install
 
 # Leave
