@@ -3,7 +3,7 @@
 requirement_files=("odoo_requirements.txt" "requirements.txt")
 for req in "${requirement_files[@]}"; do
   if [ -f "$req" ]; then
-    puts-step "pip install -r $req"
+    puts-cmd "pip install -r $req"
     set +e
     pip install -r $req --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"

@@ -8,8 +8,9 @@ curl -sL $ARCHIVE_ODOO | tar xz -C ./odoo_tmp --strip 1
 curl -sL $ARCHIVE_COMPAT | tar xz -C ./compat_tmp --strip 1
 cp -a ./compat_tmp/patch/. ./odoo_tmp/
 pip install --upgrade --no-dependencies --no-cache-dir ./odoo_tmp
+rm -rf .heroku/odoo/addons &> /dev/null || true
 mv ./odoo_tmp/addons .heroku/odoo/addons
-rm -r ./odoo_tmp ./compat_tmp
+rm -rf ./odoo_tmp ./compat_tmp
 
 # Copy wrapper script
 cp $ROOT_DIR/lib/odooku .heroku/odoo/bin

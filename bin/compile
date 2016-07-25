@@ -67,6 +67,8 @@ ln -s $BUILD_DIR/.heroku/odoo/bin/python /app/.heroku/odoo/bin/python
 # Install libraries
 source $BIN_DIR/steps/libraries/sasl
 source $BIN_DIR/steps/libraries/openldap
+source $BIN_DIR/steps/libraries/lessc
+source $BIN_DIR/steps/libraries/wkhtmltopdf
 
 # Install requirements
 source $BIN_DIR/steps/pip-install
