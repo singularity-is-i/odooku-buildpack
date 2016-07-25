@@ -10,14 +10,20 @@ if [[ $DATABASE_URL =~ ^postgres.* ]]; then
 fi
 
 ODOOKU_PORT="$1"
+
+# 2*cores + 1
+ODOOKU_WORKERS="0"
+
+# Shouldn't be anything other than /tmp
 ODOOKU_DATA_DIR="${ODOOKU_DATA_DIR:-'/tmp'}"
+
 ODOOKU_DB_USER="${ODOOKU_DB_USER:-$DB_USER}"
 ODOOKU_DB_PASSWORD="${ODOOKU_DB_PASSWORD:-$DB_PASSWORD}"
 ODOOKU_DB_HOST="${ODOOKU_DB_HOST:-$DB_HOST}"
 ODOOKU_DB_PORT="${ODOOKU_DB_PORT:-$DB_PORT}"
 ODOOKU_DB_NAME="${ODOOKU_DB_NAME:-$DB_NAME}"
 
-options="--no-database-list --xmlrpc-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
+options="--no-database-list --workers $ODOOKU_WORKERS --xmlrpc-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
 if [ -v ODOOKU_ADDONS ]; then
   options="$options --addons-path $ODOOKU_ADDONS"
 fi
