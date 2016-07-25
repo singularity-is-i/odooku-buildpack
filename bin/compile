@@ -38,6 +38,9 @@ cp -a $CACHE_DIR/.heroku/. $BUILD_DIR/.heroku/ &> /dev/null || true
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Prepend proper environment variables for Python use.
+O_PATH=$PATH
+O_LIBRARY_PATH=$LIBRARY_PATH
+O_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export PATH=$BUILD_DIR/.heroku/odoo/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
 export PYTHONHOME=$BUILD_DIR/.heroku/odoo
 export PYTHONUNBUFFERED=1
@@ -79,12 +82,17 @@ source $BIN_DIR/steps/odoo-install
 # Leave
 popd
 
+# Reset
+export PATH=$O_PATH
+export LIBRARY_PATH=$O_LIBRARY_PATH
+export LD_LIBRARY_PATH=$O_LD_LIBRARY_PATH
+
 # Create .profile script for application runtime environment variables.
-set-env PATH "$HOME/.heroku/odoo/bin:$PATH"
+set-env PATH "$HOME/.heroku/odoo/bin:$HOME/.heroku/vendor/bin:$PATH"
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME "$HOME/.heroku/odoo"
 set-env LIBRARY_PATH "$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib:$LIBRARY_PATH"
-set-env LD_LIBRARY_PATH "$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib:$LD_LIBRARY_PATH"
+set-env LD_LIBRARY_PATH "$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib$:$LD_LIBRARY_PATH"
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH "$HOME/"
