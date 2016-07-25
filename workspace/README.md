@@ -16,6 +16,7 @@ Then, shell into an instance and run a build by giving the name of the formula i
     ~ $ bob deploy --overwrite runtimes/python-2.7.12
     ~ $ bob deploy --overwrite libraries/vendor/openldap
     ~ $ bob deploy --overwrite libraries/vendor/sasl
+    ~ $ bob deploy --overwrite libraries/vendor/wkhtmltopdf
 
 If this works, run `bob deploy` instead of `bob build` to have the result uploaded to S3 for you.
 
