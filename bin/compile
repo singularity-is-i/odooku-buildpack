@@ -8,6 +8,7 @@ set -eo pipefail
 # Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
+LIB_DIR=$ROOT_DIR/lib
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
@@ -22,7 +23,7 @@ unset CFLAGS LDFLAGS
 export WARNINGS_LOG=$(mktemp)
 
 # Syntax sugar.
-source $BIN_DIR/utils
+source $LIB_DIR/utils
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/odoo.sh"
@@ -35,7 +36,7 @@ mkdir -p $(dirname $PROFILE_PATH)
 cp -a $CACHE_DIR/.heroku/. $BUILD_DIR/.heroku/ &> /dev/null || true
 
 # We"ll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
+export ROOT_DIR BUILD_DIR CACHE_DIR BIN_DIR LIB_DIR PROFILE_PATH
 
 # Prepend proper environment variables for Python use.
 O_PATH=$PATH
@@ -69,16 +70,16 @@ mkdir -p /app/.heroku/odoo/bin
 ln -s $BUILD_DIR/.heroku/odoo/bin/python /app/.heroku/odoo/bin/python
 
 # Install libraries
-source $BIN_DIR/steps/libraries/sasl
-source $BIN_DIR/steps/libraries/openldap
-source $BIN_DIR/steps/libraries/lessc
-source $BIN_DIR/steps/libraries/wkhtmltopdf
+source $LIB_DIR/steps/libraries/sasl
+source $LIB_DIR/steps/libraries/openldap
+source $LIB_DIR/steps/libraries/lessc
+source $LIB_DIR/steps/libraries/wkhtmltopdf
 
 # Install Odoo
-source $BIN_DIR/steps/odoo-install
+source $LIB_DIR/steps/odoo-install
 
 # Install requirements
-source $BIN_DIR/steps/pip-install
+source $LIB_DIR/steps/pip-install
 
 # Leave
 popd
