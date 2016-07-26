@@ -55,6 +55,7 @@ export PKG_CONFIG_PATH=$BUILD_DIR/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.hero
 
 # Set defaults
 export ODOOKU_ADDONS=""
+export REQUIREMENTS="requirements.txt"
 
 # Enter BUILD_DIR
 pushd $BUILD_DIR
@@ -73,11 +74,11 @@ source $BIN_DIR/steps/libraries/openldap
 source $BIN_DIR/steps/libraries/lessc
 source $BIN_DIR/steps/libraries/wkhtmltopdf
 
-# Install requirements
-source $BIN_DIR/steps/pip-install
-
 # Install Odoo
 source $BIN_DIR/steps/odoo-install
+
+# Install requirements
+source $BIN_DIR/steps/pip-install
 
 # Leave
 popd
@@ -97,7 +98,6 @@ set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH "$HOME/"
 set-default-env ODOOKU_ADDONS "$ODOOKU_ADDONS"
-
 
 # Update cache
 rm -rf $CACHE_DIR/.heroku &> /dev/null || true

@@ -1,21 +1,53 @@
 #!/usr/bin/env bash
 
-ARCHIVE_ODOO="https://github.com/odoo/odoo/archive/9.0.tar.gz"
-ARCHIVE_COMPAT="https://github.com/adaptivdesign/odooku-compat/archive/master.tar.gz"
+ODOO_VERSION=`sed '1q;d' $BUILD_DIR/odoo.txt 2> /dev/null || echo '9.0'`
+COMPAT_VERSION=`sed '1q;d' $BUILD_DIR/compat.txt 2> /dev/null || echo 'master'`
 
-mkdir ./odoo_tmp ./compat_tmp
-curl -sL $ARCHIVE_ODOO | tar xz -C ./odoo_tmp --strip 1
-curl -sL $ARCHIVE_COMPAT | tar xz -C ./compat_tmp --strip 1
-cp -a ./compat_tmp/patch/. ./odoo_tmp/
-pip install --upgrade --no-dependencies --no-cache-dir ./odoo_tmp
-rm -rf .heroku/odoo/addons &> /dev/null || true
-mv ./odoo_tmp/addons .heroku/odoo/addons
-rm -rf ./odoo_tmp ./compat_tmp
+ODOO_ARCHIVE="https://github.com/odoo/odoo/archive/$ODOO_VERSION.tar.gz"
+COMPAT_ARCHIVE="https://github.com/adaptivdesign/odooku-compat/archive/$COMPAT_VERSION.tar.gz"
+
+ODOO_HASH=`curl https://api.github.com/repos/odoo/odoo/commits/$ODOO_VERSION | md5`
+COMPAT_HASH=`curl https://api.github.com/repos/adaptivdesign/odooku-compat/commits/$COMPAT_VERSION | md5`
+
+O_ODOO_HASH=`cat heroku/odoo/stack/odoo_hash 2> /dev/null || true`
+O_COMPAT_HASH=`cat heroku/odoo/stack/compat_hash 2> /dev/null || true`
+
+if [ ! -f ".heroku/odoo/addons" ] || [ $ODOO_HASH != $O_ODOO_HASH ] || [ $COMPAT_HASH != $O_COMPAT_HASH ]; then
+  mkdir ./odoo_tmp ./compat_tmp
+  curl -sL $ODOO_ARCHIVE | tar xz -C ./odoo_tmp --strip 1
+  curl -sL $COMPAT_ARCHIVE | tar xz -C ./compat_tmp --strip 1
+  cp -a ./compat_tmp/patch/. ./odoo_tmp/
+  pip install --upgrade --no-dependencies --no-cache-dir ./odoo_tmp
+  rm -rf .heroku/odoo/addons .heroku/odoo/compat_addons &> /dev/null || true
+  mv ./odoo_tmp/addons .heroku/odoo/addons
+  mv ./compat_tmp/addons .heroku/odoo/compat_addons
+
+  # Keep stack
+  mkdir -p .heroku/odoo/stack
+  echo $ODOO_HASH > .heroku/odoo/stack/odoo_hash
+  echo $COMPAT_HASH > .heroku/odoo/stack/compat_hash
+
+  # Move over requirements, unless they are already provided by the app
+  if [ ! -f "./compat_requirements.txt" ]; then
+    cp ./compat_tmp/requirements.txt ./compat_requirements.txt
+  fi
+
+  if [ ! -f "./odoo_requirements.txt" ]; then
+    cp ./odoo_tmp/requirements.txt ./odoo_requirements.txt
+  fi
+
+  # Export additional requirements
+  export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt compat_requirements.txt"
+
+  # Cleanup
+  rm -rf ./odoo_tmp ./compat_tmp
+fi
 
 # Copy wrapper script
 cp $ROOT_DIR/lib/odooku .heroku/odoo/bin
 
-export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons,$HOME/.heroku/odoo/addons"
+# Export addon locations
+export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons,$HOME/.heroku/odoo/compat_addons,$HOME/.heroku/odoo/addons"
 if [ -d "./addons" ]; then
   export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons"
 fi
