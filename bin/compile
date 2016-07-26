@@ -59,7 +59,7 @@ export ODOOKU_ADDONS=""
 export REQUIREMENTS="requirements.txt"
 
 # Enter BUILD_DIR
-pushd $BUILD_DIR
+pushd $BUILD_DIR > /dev/null
 
 # Install runtimes
 source $LIB_DIR/steps/runtimes/python
@@ -82,7 +82,7 @@ source $LIB_DIR/steps/odoo-install
 source $LIB_DIR/steps/pip-install
 
 # Leave
-popd
+popd > /dev/null
 
 # Reset
 export PATH=$O_PATH

@@ -11,13 +11,13 @@ COMPAT_HASH=`curl -s https://api.github.com/repos/adaptivdesign/odooku-compat/co
 puts-line "Using Odoo (${ODOO_VERSION}) @ (${ODOO_HASH})"
 puts-line "Using Odooku compat (${COMPAT_VERSION}) @ (${ODOO_HASH})"
 
-O_ODOO_HASH=`cat heroku/odoo/stack/odoo_hash 2> /dev/null || true`
-O_COMPAT_HASH=`cat heroku/odoo/stack/compat_hash 2> /dev/null || true`
+O_ODOO_HASH=`cat .heroku/odoo/stack/odoo_hash 2> /dev/null || true`
+O_COMPAT_HASH=`cat .heroku/odoo/stack/compat_hash 2> /dev/null || true`
 
 if [ ! -d ".heroku/odoo/addons" ] || [ "$ODOO_HASH" != "$O_ODOO_HASH" ] || [ "$COMPAT_HASH" != "$O_COMPAT_HASH" ]; then
   mkdir ./odoo_tmp ./compat_tmp
-  curl -sL $ODOO_ARCHIVE | tar xz -C ./odoo_tmp --strip 1
-  curl -sL $COMPAT_ARCHIVE | tar xz -C ./compat_tmp --strip 1
+  curl -sL $ODOO_ARCHIVE 2> /dev/null | tar xz -C ./odoo_tmp --strip 1
+  curl -sL $COMPAT_ARCHIVE 2> /dev/null | tar xz -C ./compat_tmp --strip 1
 
   puts-step "Installing Odoo"
   puts-line "Applying Odooku patches"
