@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+# A POSIX variable
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+
+while getopts "h?w:" opt; do
+    case "$opt" in
+    h|\?)
+        exit 0
+        ;;
+    w)  ODOOKU_WORKERS=$OPTARG
+        ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+
 # Parse heroku DATABASE_URL
 if [[ $DATABASE_URL =~ ^postgres.* ]]; then
     DB_USER=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/\(.*\):.*@.*:.*\/.*$/\1/')
@@ -9,10 +26,15 @@ if [[ $DATABASE_URL =~ ^postgres.* ]]; then
     DB_NAME=$(echo $DATABASE_URL | sed -e 's/^postgres:\/\/.*:.*@.*:.*\/\(.*\)$/\1/')
 fi
 
+if [ "$1" == "" ]; then
+  echo "No port given" 1>&2
+  exit 1
+fi
+
 ODOOKU_PORT="$1"
 
 # 2*cores + 1
-ODOOKU_WORKERS="0"
+ODOOKU_WORKERS="${ODOOKU_WORKERS:-0}"
 
 # Shouldn't be anything other than /tmp
 ODOOKU_DATA_DIR="${ODOOKU_DATA_DIR:-'/tmp'}"
