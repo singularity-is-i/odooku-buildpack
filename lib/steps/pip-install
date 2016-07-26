@@ -5,7 +5,7 @@ for req in "${requirements[@]}"; do
   if [ -f $req ]; then
     puts-cmd "pip install -r $req"
     set +e
-    pip install -r $req --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+    pip install -r $req --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
     if [[ ! $PIP_STATUS -eq 0 ]]; then

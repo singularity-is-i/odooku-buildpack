@@ -6,18 +6,24 @@ COMPAT_VERSION=`sed '1q;d' $BUILD_DIR/compat.txt 2> /dev/null || echo 'master'`
 ODOO_ARCHIVE="https://github.com/odoo/odoo/archive/$ODOO_VERSION.tar.gz"
 COMPAT_ARCHIVE="https://github.com/adaptivdesign/odooku-compat/archive/$COMPAT_VERSION.tar.gz"
 
-ODOO_HASH=`curl https://api.github.com/repos/odoo/odoo/commits/$ODOO_VERSION | $JQ -r '.sha'`
-COMPAT_HASH=`curl https://api.github.com/repos/adaptivdesign/odooku-compat/commits/$COMPAT_VERSION | $JQ -r '.sha'`
+ODOO_HASH=`curl -s https://api.github.com/repos/odoo/odoo/commits/$ODOO_VERSION | $JQ -r '.sha'`
+COMPAT_HASH=`curl -s https://api.github.com/repos/adaptivdesign/odooku-compat/commits/$COMPAT_VERSION | $JQ -r '.sha'`
+puts-line "Using Odoo (${ODOO_VERSION}) @ (${ODOO_HASH})"
+puts-line "Using Odooku compat (${COMPAT_VERSION}) @ (${ODOO_HASH})"
 
 O_ODOO_HASH=`cat heroku/odoo/stack/odoo_hash 2> /dev/null || true`
 O_COMPAT_HASH=`cat heroku/odoo/stack/compat_hash 2> /dev/null || true`
 
-if [ ! -f ".heroku/odoo/addons" ] || [ $ODOO_HASH != $O_ODOO_HASH ] || [ $COMPAT_HASH != $O_COMPAT_HASH ]; then
+if [ ! -d ".heroku/odoo/addons" ] || [ $ODOO_HASH != $O_ODOO_HASH ] || [ $COMPAT_HASH != $O_COMPAT_HASH ]; then
   mkdir ./odoo_tmp ./compat_tmp
   curl -sL $ODOO_ARCHIVE | tar xz -C ./odoo_tmp --strip 1
   curl -sL $COMPAT_ARCHIVE | tar xz -C ./compat_tmp --strip 1
+
+  puts-step "Installing Odoo"
+  puts-line "Applying Odooku patches"
   cp -a ./compat_tmp/patch/. ./odoo_tmp/
-  pip install --upgrade --no-dependencies --no-cache-dir ./odoo_tmp
+  puts-line "Running Odoo setup.py"
+  pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
   rm -rf .heroku/odoo/addons .heroku/odoo/compat_addons &> /dev/null || true
   mv ./odoo_tmp/addons .heroku/odoo/addons
   mv ./compat_tmp/addons .heroku/odoo/compat_addons
@@ -30,10 +36,14 @@ if [ ! -f ".heroku/odoo/addons" ] || [ $ODOO_HASH != $O_ODOO_HASH ] || [ $COMPAT
   # Move over requirements, unless they are already provided by the app
   if [ ! -f "./compat_requirements.txt" ]; then
     cp ./compat_tmp/requirements.txt ./compat_requirements.txt
+  else
+    puts-line "Detected custom compat_requirements.txt"
   fi
 
   if [ ! -f "./odoo_requirements.txt" ]; then
     cp ./odoo_tmp/requirements.txt ./odoo_requirements.txt
+  else
+    puts-line "Detected custom odoo_requirements.txt"
   fi
 
   # Export additional requirements
@@ -44,6 +54,7 @@ if [ ! -f ".heroku/odoo/addons" ] || [ $ODOO_HASH != $O_ODOO_HASH ] || [ $COMPAT
 fi
 
 # Copy wrapper script
+puts-step "Installing odooku script"
 cp $ROOT_DIR/lib/odooku .heroku/odoo/bin
 
 # Export addon locations

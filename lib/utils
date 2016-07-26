@@ -14,7 +14,7 @@ indent() {
 }
 
 # Clean up pip output
-cleanup() {
+cleanup-pip-output() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
 }
 
@@ -53,37 +53,6 @@ un-set-env() {
   echo "unset $1" >> $PROFILE_PATH
 }
 
-# Does some serious copying.
-deep-cp() {
-  declare source="$1" target="$2"
-
-  mkdir -p "$target"
-
-  # cp doesn't like being called without source params,
-  # so make sure they expand to something first.
-  # subshell to avoid surprising caller with shopts.
-  (
-    shopt -s nullglob dotglob
-    set -- "$source"/!(tmp|.|..)
-    [[ $# == 0 ]] || cp -a "$@" "$target"
-  )
-}
-
-# Does some serious moving.
-deep-mv() {
-  deep-cp "$1" "$2"
-  deep-rm "$1"
-}
-
-# Does some serious deleting.
-deep-rm() {
-  # subshell to avoid surprising caller with shopts.
-  (
-    shopt -s dotglob
-    rm -rf "$1"/!(.curlrc|.netrc|tmp|.|..)
-  )
-}
-
 get_os() {
   uname | tr A-Z a-z
 }
@@ -99,26 +68,3 @@ get_cpu() {
 os=$(get_os)
 cpu=$(get_cpu)
 export JQ="$ROOT_DIR/vendor/jq-$os"
-
-sub-env() {
-
-  WHITELIST=${2:-''}
-  BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
-
-  # Python-specific variables.
-  export PYHONHOME=$BUILD_DIR/.heroku/python
-  export PYTHONPATH=$BUILD_DIR/
-
-  (
-    if [ -d "$ENV_DIR" ]; then
-      for e in $(ls $ENV_DIR); do
-        echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
-        export "$e=$(cat $ENV_DIR/$e)"
-        :
-      done
-    fi
-
-    $1
-
-  )
-}

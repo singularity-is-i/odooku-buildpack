@@ -2,7 +2,7 @@
 ARCHIVE="https://odooku.s3.amazonaws.com/runtimes/python-2.7.12.tar.gz"
 
 if [ ! -f ".heroku/odoo/bin/python" ]; then
-  puts-step "Bootstrapping Python 2.7.12"
+  puts-step "Bootstrapping python"
   mkdir -p .heroku/odoo
-  curl $ARCHIVE -s | tar zxv -C .heroku/odoo &> /dev/null
+  curl -s $ARCHIVE | tar zxv -C .heroku/odoo &> /dev/null
 fi

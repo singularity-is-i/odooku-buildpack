@@ -2,7 +2,7 @@
 ARCHIVE="https://odooku.s3.amazonaws.com/libraries/vendor/lessc.tar.gz"
 
 if [ ! -f ".heroku/vendor/bin/lessc" ]; then
-  puts-step "Bootstrapping lessc."
+  puts-step "Bootstrapping lessc"
   mkdir -p .heroku/vendor
-  curl $ARCHIVE -s | tar zxv -C .heroku/vendor &> /dev/null
+  curl -s $ARCHIVE | tar zxv -C .heroku/vendor &> /dev/null
 fi

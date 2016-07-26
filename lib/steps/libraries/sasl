@@ -2,9 +2,9 @@
 ARCHIVE="https://odooku.s3.amazonaws.com/libraries/vendor/sasl.tar.gz"
 
 if [ ! -f ".heroku/vendor/lib/libsasl2.so" ]; then
-  puts-step "Bootstrapping Cyrus SASL."
+  puts-step "Bootstrapping Cyrus SASL"
   mkdir -p .heroku/vendor
-  curl $ARCHIVE -s | tar zxv -C .heroku/vendor &> /dev/null
+  curl -s $ARCHIVE | tar zxv -C .heroku/vendor &> /dev/null
 fi
 
 export CFLAGS="$CFLAGS -I$(pwd)/.heroku/vendor/include/sasl"
