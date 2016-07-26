@@ -3,4 +3,4 @@
 BUILD_DIR=$1
 
 # No detection required
-echo Odoo
+echo Odooku
