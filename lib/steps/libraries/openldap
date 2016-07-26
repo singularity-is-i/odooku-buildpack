@@ -4,5 +4,5 @@ ARCHIVE="https://odooku.s3.amazonaws.com/libraries/vendor/openldap.tar.gz"
 if [ ! -f ".heroku/vendor/lib/libldap.so" ]; then
   puts-step "Bootstrapping openLDAP"
   mkdir -p .heroku/vendor
-  curl -s $ARCHIVE | tar zxv -C .heroku/vendor &> /dev/null
+  curl -s $ARCHIVE 2> /dev/null | tar zxv -C .heroku/vendor &> /dev/null
 fi

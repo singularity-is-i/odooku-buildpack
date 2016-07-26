@@ -4,5 +4,5 @@ ARCHIVE="https://odooku.s3.amazonaws.com/libraries/vendor/wkhtmltopdf.tar.gz"
 if [ ! -f ".heroku/vendor/bin/wkhtmltopdf" ]; then
   puts-step "Bootstrapping wkhtmltopdf"
   mkdir -p .heroku/vendor
-  curl -s $ARCHIVE | tar zxv -C .heroku/vendor &> /dev/null
+  curl -s $ARCHIVE 2> /dev/null | tar zxv -C .heroku/vendor &> /dev/null
 fi
