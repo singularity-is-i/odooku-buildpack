@@ -70,4 +70,4 @@ if [ -v ODOOKU_DB_PASSWORD ]; then
   options="$options -w $ODOOKU_DB_PASSWORD"
 fi
 
-odoo.py $options
+openerp-gevent $options
