@@ -45,7 +45,7 @@ ODOOKU_DB_HOST="${ODOOKU_DB_HOST:-$DB_HOST}"
 ODOOKU_DB_PORT="${ODOOKU_DB_PORT:-$DB_PORT}"
 ODOOKU_DB_NAME="${ODOOKU_DB_NAME:-$DB_NAME}"
 
-options="--no-database-list --without-demo all --workers $ODOOKU_WORKERS --xmlrpc-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
+options="--no-database-list --without-demo all --workers $ODOOKU_WORKERS --longpolling-port $ODOOKU_PORT --data-dir $ODOOKU_DATA_DIR"
 if [ -v ODOOKU_ADDONS ]; then
   options="$options --addons-path $ODOOKU_ADDONS"
 fi
@@ -70,4 +70,4 @@ if [ -v ODOOKU_DB_PASSWORD ]; then
   options="$options -w $ODOOKU_DB_PASSWORD"
 fi
 
-openerp-server $options
+openerp-gevent $options
