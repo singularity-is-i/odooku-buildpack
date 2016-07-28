@@ -9,7 +9,7 @@ COMPAT_ARCHIVE="https://github.com/adaptivdesign/odooku-compat/archive/$COMPAT_V
 ODOO_HASH=`curl -s https://api.github.com/repos/odoo/odoo/commits/$ODOO_VERSION  2> /dev/null | $JQ -r '.sha'`
 COMPAT_HASH=`curl -s https://api.github.com/repos/adaptivdesign/odooku-compat/commits/$COMPAT_VERSION  2> /dev/null | $JQ -r '.sha'`
 puts-line "Using Odoo (${ODOO_VERSION}) @ (${ODOO_HASH})"
-puts-line "Using Odooku compat (${COMPAT_VERSION}) @ (${ODOO_HASH})"
+puts-line "Using Odooku compat (${COMPAT_VERSION}) @ (${O_COMPAT_HASH})"
 
 O_ODOO_HASH=`cat .heroku/odoo/stack/odoo_hash 2> /dev/null || true`
 O_COMPAT_HASH=`cat .heroku/odoo/stack/compat_hash 2> /dev/null || true`
