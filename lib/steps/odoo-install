@@ -46,12 +46,12 @@ if [ ! -d ".heroku/odoo/addons" ] || [ "$ODOO_HASH" != "$O_ODOO_HASH" ] || [ "$C
     puts-line "Detected custom odoo_requirements.txt"
   fi
 
-  # Export additional requirements
-  export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt compat_requirements.txt"
-
   # Cleanup
   rm -rf ./odoo_tmp ./compat_tmp
 fi
+
+# Export additional requirements
+export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt compat_requirements.txt"
 
 # Copy wrapper script
 puts-step "Installing odooku script"
