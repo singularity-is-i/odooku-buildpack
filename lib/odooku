@@ -74,4 +74,4 @@ if [ "$ODOOKU_DEV" == "1" ]; then
   options="$options --dev"
 fi
 
-openerp-gevent $options
+openerp-server $options
