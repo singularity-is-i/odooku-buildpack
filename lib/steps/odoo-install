@@ -53,10 +53,6 @@ fi
 # Export additional requirements
 export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt compat_requirements.txt"
 
-# Copy wrapper script
-puts-step "Installing odooku script"
-cp $ROOT_DIR/lib/odooku .heroku/odoo/bin
-
 # Export addon locations
 export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons,$HOME/.heroku/odoo/compat_addons,$HOME/.heroku/odoo/addons"
 if [ -d "./addons" ]; then
