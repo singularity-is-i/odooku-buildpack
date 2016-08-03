@@ -22,6 +22,8 @@ if [ ! -d ".heroku/odoo/addons" ] || [ "$ODOO_HASH" != "$O_ODOO_HASH" ] || [ "$C
   puts-step "Installing Odoo"
   puts-line "Applying Odooku patches"
   cp -a ./compat_tmp/patch/. ./odoo_tmp/
+  puts-line "Running Odooku runtime setup.py"
+  pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./compat_tmp/runtime 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
   puts-line "Running Odoo setup.py"
   pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
   rm -rf .heroku/odoo/addons .heroku/odoo/compat_addons &> /dev/null || true
