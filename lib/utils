@@ -2,11 +2,7 @@
 
 shopt -s extglob
 
-if [ $(uname) == Darwin ]; then
-    sed() { command sed -l "$@"; }
-else
-    sed() { command sed -u "$@"; }
-fi
+sed() { command sed -u "$@"; }
 
 # Syntax sugar.
 indent() {
@@ -53,18 +49,4 @@ un-set-env() {
   echo "unset $1" >> $PROFILE_PATH
 }
 
-get_os() {
-  uname | tr A-Z a-z
-}
-
-get_cpu() {
-  if [[ "$(uname -p)" = "i686" ]]; then
-    echo "x86"
-  else
-    echo "x64"
-  fi
-}
-
-os=$(get_os)
-cpu=$(get_cpu)
-export JQ="$ROOT_DIR/vendor/jq-$os"
+export JQ="$ROOT_DIR/vendor/jq"

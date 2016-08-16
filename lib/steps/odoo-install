@@ -10,6 +10,7 @@ ODOO_COMMIT=`$JQ -r .odoo.commit ./odooku.json`
 if [ $ODOO_COMMIT == "null" ]; then
   # Grab latest commit from github api
   ODOO_COMMIT=`curl -s $GITHUB_API_URL/repos/$ODOO_REPO/commits/$ODOO_BRANCH  2> /dev/null | $JQ -r '.sha'`
+  puts-line "Using latest commit $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
 fi
 
 COMPAT_REPO=`$JQ -r .compat.repo ./odooku.json`
@@ -19,13 +20,11 @@ COMPAT_COMMIT=`$JQ -r .compat.commit ./odooku.json`
 if [ $COMPAT_COMMIT == "null" ]; then
   # Grab latest commit from github api
   COMPAT_COMMIT=`curl -s $GITHUB_API_URL/repos/$COMPAT_REPO/commits/$COMPAT_BRANCH  2> /dev/null | $JQ -r '.sha'`
+  puts-line "Using latest commit $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
 fi
 
 # Create final stack
 STACK='{"odoo":{"repo": "$ODOO_REPO", "branch": "$ODOO_BRANCH", "commit": "$ODOO_COMMIT"},"compat": {"repo": "$COMPAT_REPO", "branch": "$COMPAT_BRANCH", "commit": "$COMPAT_COMMIT"}}'
-
-puts-line "Using $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
-puts-line "Using $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
 
 # See if
 if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ]; then
