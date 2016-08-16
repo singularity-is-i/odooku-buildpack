@@ -24,7 +24,7 @@ if [ $COMPAT_COMMIT == "null" ]; then
 fi
 
 # Create final stack
-STACK='{"odoo":{"repo": "$ODOO_REPO", "branch": "$ODOO_BRANCH", "commit": "$ODOO_COMMIT"},"compat": {"repo": "$COMPAT_REPO", "branch": "$COMPAT_BRANCH", "commit": "$COMPAT_COMMIT"}}'
+STACK="{\"odoo\":{\"repo\": \"$ODOO_REPO\", \"branch\": \"$ODOO_BRANCH\", \"commit\": \"$ODOO_COMMIT\"},\"compat\": {\"repo\": \"$COMPAT_REPO\", \"branch\": \"$COMPAT_BRANCH\", \"commit\": \"$COMPAT_COMMIT\"}}"
 
 # See if
 if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ]; then
