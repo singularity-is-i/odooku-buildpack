@@ -22,20 +22,7 @@ if [ $COMPAT_COMMIT == "null" ]; then
 fi
 
 # Create final stack
-read -d '' STACK <<EOF
-{
-  "odoo": {
-    "repo": "$ODOO_REPO",
-    "branch": "$ODOO_BRANCH",
-    "commit": "$ODOO_COMMIT"
-  },
-  "compat": {
-    "repo": "$COMPAT_REPO",
-    "branch": "$COMPAT_BRANCH",
-    "commit": "$COMPAT_COMMIT"
-  }
-}
-EOF
+STACK='{"odoo":{"repo": "$ODOO_REPO", "branch": "$ODOO_BRANCH", "commit": "$ODOO_COMMIT"},"compat": {"repo": "$COMPAT_REPO", "branch": "$COMPAT_BRANCH", "commit": "$COMPAT_COMMIT"}}'
 
 puts-line "Using $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
 puts-line "Using $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
