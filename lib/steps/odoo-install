@@ -9,7 +9,7 @@ ODOO_COMMIT=`$JQ -r .odoo.commit ./odooku.json`
 
 if [ $ODOO_COMMIT == "null" ]; then
   # Grab latest commit from github api
-  ODOO_COMMIT=`curl -s $GITHUB_API_URL/repos/$ODOO_REPO/$ODOO_BRANCH  2> /dev/null | $JQ -r '.sha'`
+  ODOO_COMMIT=`curl -s $GITHUB_API_URL/repos/$ODOO_REPO/commits/$ODOO_BRANCH  2> /dev/null | $JQ -r '.sha'`
 fi
 
 COMPAT_REPO=`$JQ -r .compat.repo ./odooku.json`
@@ -18,7 +18,7 @@ COMPAT_COMMIT=`$JQ -r .compat.commit ./odooku.json`
 
 if [ $COMPAT_COMMIT == "null" ]; then
   # Grab latest commit from github api
-  COMPAT_COMMIT=`curl -s $GITHUB_API_URL/repos/$COMPAT_REPO/$COMPAT_BRANCH  2> /dev/null | $JQ -r '.sha'`
+  COMPAT_COMMIT=`curl -s $GITHUB_API_URL/repos/$COMPAT_REPO/commits/$COMPAT_BRANCH  2> /dev/null | $JQ -r '.sha'`
 fi
 
 # Create final stack
