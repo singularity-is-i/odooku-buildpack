@@ -1,20 +1,54 @@
 #!/usr/bin/env bash
 
-ODOO_VERSION=`sed '1q;d' $BUILD_DIR/odoo.txt 2> /dev/null || echo '9.0'`
-COMPAT_VERSION=`sed '1q;d' $BUILD_DIR/compat.txt 2> /dev/null || echo 'master'`
+GITHUB_API_URL="https://api.github.com"
+GITHUB_URL="https://github.com"
 
-ODOO_ARCHIVE="https://github.com/odoo/odoo/archive/$ODOO_VERSION.tar.gz"
-COMPAT_ARCHIVE="https://github.com/adaptivdesign/odooku-compat/archive/$COMPAT_VERSION.tar.gz"
+ODOO_REPO=`$JQ odoo.repo ./odooku.json`
+ODOO_BRANCH=`$JQ odoo.branch ./odooku.json`
+ODOO_COMMIT=`$JQ odoo.commit ./odooku.json`
 
-ODOO_HASH=`curl -s https://api.github.com/repos/odoo/odoo/commits/$ODOO_VERSION  2> /dev/null | $JQ -r '.sha'`
-COMPAT_HASH=`curl -s https://api.github.com/repos/adaptivdesign/odooku-compat/commits/$COMPAT_VERSION  2> /dev/null | $JQ -r '.sha'`
-puts-line "Using Odoo (${ODOO_VERSION}) @ (${ODOO_HASH})"
-puts-line "Using Odooku compat (${COMPAT_VERSION}) @ (${COMPAT_HASH})"
+if [ $ODOO_COMMIT == "null" ]; then
+  # Grab latest commit from github api
+  ODOO_COMMIT=`curl -s $GITHUB_API_URL/repos/$ODOO_REPO/$ODOO_BRANCH  2> /dev/null | $JQ -r '.sha'`
+fi
+
+COMPAT_REPO=`$JQ compat.repo ./odooku.json`
+COMPAT_BRANCH=`$JQ compat.branch ./odooku.json`
+COMPAT_COMMIT=`$JQ compat.commit ./odooku.json`
+
+if [ $COMPAT_COMMIT == "null" ]; then
+  # Grab latest commit from github api
+  COMPAT_COMMIT=`curl -s $GITHUB_API_URL/repos/$COMPAT_REPO/$COMPAT_BRANCH  2> /dev/null | $JQ -r '.sha'`
+fi
+
+puts-line "Using $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
+puts-line "Using $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
 
 O_ODOO_HASH=`cat .heroku/odoo/stack/odoo_hash 2> /dev/null || true`
 O_COMPAT_HASH=`cat .heroku/odoo/stack/compat_hash 2> /dev/null || true`
 
-if [ ! -d ".heroku/odoo/addons" ] || [ "$ODOO_HASH" != "$O_ODOO_HASH" ] || [ "$COMPAT_HASH" != "$O_COMPAT_HASH" ]; then
+# Create final stack
+read -d '' STACK <<EOF
+{
+  "odoo": {
+    "repo": "$ODOO_REPO",
+    "branch": "$ODOO_BRANCH",
+    "commit": "$ODOO_COMMIT"
+  },
+  "compat": {
+    "repo": "$COMPAT_REPO",
+    "branch": "$COMPAT_BRANCH",
+    "commit": "$COMPAT_COMMIT"
+  }
+}
+EOF
+
+# See if 
+if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ]; then
+
+  ODOO_ARCHIVE="$GITHUB_URL/$ODOO_REPO/archive/$ODOO_COMMIT.tar.gz"
+  COMPAT_ARCHIVE="$GITHUB_URL/$COMPAT_REPO/archive/$COMPAT_COMMIT.tar.gz"
+
   mkdir ./odoo_tmp ./compat_tmp
   curl -sL $ODOO_ARCHIVE 2> /dev/null | tar xz -C ./odoo_tmp --strip 1
   curl -sL $COMPAT_ARCHIVE 2> /dev/null | tar xz -C ./compat_tmp --strip 1
@@ -32,8 +66,7 @@ if [ ! -d ".heroku/odoo/addons" ] || [ "$ODOO_HASH" != "$O_ODOO_HASH" ] || [ "$C
 
   # Keep stack
   mkdir -p .heroku/odoo/stack
-  echo $ODOO_HASH > .heroku/odoo/stack/odoo_hash
-  echo $COMPAT_HASH > .heroku/odoo/stack/compat_hash
+  echo $STACK > .heroku/odoo/stack/odooku.json
 
   # Move over requirements, unless they are already provided by the app
   if [ ! -f "./compat_requirements.txt" ]; then

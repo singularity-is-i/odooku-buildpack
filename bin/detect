@@ -2,5 +2,11 @@
 
 BUILD_DIR=$1
 
+# Exit early if odooku.json is not present
+if [ ! -f $BUILD_DIR/odooku.json ]; then
+  exit 1
+fi
+
+
 # No detection required
 echo Odooku
