@@ -26,8 +26,8 @@ fi
 # Create final stack
 STACK="{\"odoo\":{\"repo\": \"$ODOO_REPO\", \"branch\": \"$ODOO_BRANCH\", \"commit\": \"$ODOO_COMMIT\"},\"compat\": {\"repo\": \"$COMPAT_REPO\", \"branch\": \"$COMPAT_BRANCH\", \"commit\": \"$COMPAT_COMMIT\"}}"
 
-# See if
-if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ]; then
+# See if anything has chanfed
+if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ] || [ -d "./patch" ]; then
 
   puts-line "New Odoo installation detected"
   puts-line "Fetching $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
@@ -42,6 +42,11 @@ if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `
   puts-step "Installing Odoo"
   puts-line "Applying Odooku patches"
   cp -a ./compat_tmp/patch/. ./odoo_tmp/
+  if [ -d "./patch" ]; then
+    puts-line "Applying patches in ./patch"
+    cp -a ./patch/. ./odoo_tmp/
+  fi
+
   puts-line "Running Odooku runtime setup.py"
   pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./compat_tmp/runtime 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
   puts-line "Running Odoo setup.py"
