@@ -94,7 +94,7 @@ set-env PATH "$HOME/.heroku/odoo/bin:$HOME/.heroku/vendor/bin:$PATH"
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME "$HOME/.heroku/odoo"
 set-env LIBRARY_PATH "$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib:$LIBRARY_PATH"
-set-env LD_LIBRARY_PATH "$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib$:$LD_LIBRARY_PATH"
+set-env LD_LIBRARY_PATH "$HOME/.heroku/vendor/lib:$HOME/.heroku/odoo/lib:$LD_LIBRARY_PATH"
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH "$HOME/"
