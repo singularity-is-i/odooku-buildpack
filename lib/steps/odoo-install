@@ -30,13 +30,13 @@ STACK="{\"odoo\":{\"repo\": \"$ODOO_REPO\", \"branch\": \"$ODOO_BRANCH\", \"comm
 if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ] || [ -d "./patch" ]; then
 
   puts-line "New Odoo installation detected"
-  puts-line "Fetching $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
-  puts-line "Fetching $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
   ODOO_ARCHIVE="$GITHUB_URL/$ODOO_REPO/archive/$ODOO_COMMIT.tar.gz"
   COMPAT_ARCHIVE="$GITHUB_URL/$COMPAT_REPO/archive/$COMPAT_COMMIT.tar.gz"
 
   mkdir ./odoo_tmp ./compat_tmp
+  puts-line "Fetching $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
   curl -sL $ODOO_ARCHIVE 2> /dev/null | tar xz -C ./odoo_tmp --strip 1
+  puts-line "Fetching $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
   curl -sL $COMPAT_ARCHIVE 2> /dev/null | tar xz -C ./compat_tmp --strip 1
 
   puts-step "Installing Odoo"
