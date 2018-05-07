@@ -53,5 +53,6 @@ export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt"
 export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/odoo/addons,$HOME/.heroku/odoo/addons"
 if [ -d "./addons" ]; then
   puts-line "Detected addons directory"
-  export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons"
+  # add custom module paths here
+  export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons,$HOME/addons/vittal_odoo_modules"
 fi
