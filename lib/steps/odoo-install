@@ -13,58 +13,26 @@ if [ $ODOO_COMMIT == "null" ]; then
   puts-line "Using latest commit $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
 fi
 
-COMPAT_REPO=`$JQ -r .compat.repo ./odooku.json`
-COMPAT_BRANCH=`$JQ -r .compat.branch ./odooku.json`
-COMPAT_COMMIT=`$JQ -r .compat.commit ./odooku.json`
-
-if [ $COMPAT_COMMIT == "null" ]; then
-  # Grab latest commit from github api
-  COMPAT_COMMIT=`curl -s $GITHUB_API_URL/repos/$COMPAT_REPO/commits/$COMPAT_BRANCH  2> /dev/null | $JQ -r '.sha'`
-  puts-line "Using latest commit $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
-fi
-
 # Create final stack
-STACK="{\"odoo\":{\"repo\": \"$ODOO_REPO\", \"branch\": \"$ODOO_BRANCH\", \"commit\": \"$ODOO_COMMIT\"},\"compat\": {\"repo\": \"$COMPAT_REPO\", \"branch\": \"$COMPAT_BRANCH\", \"commit\": \"$COMPAT_COMMIT\"}}"
+STACK="{\"odoo\":{\"repo\": \"$ODOO_REPO\", \"branch\": \"$ODOO_BRANCH\", \"commit\": \"$ODOO_COMMIT\"}}"
 
-# See if anything has chanfed
-if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack/odooku.json` ] || [ -d "./patch" ]; then
+# See if anything has changed
+if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS . .heroku/odoo/stack.json` ]; then
 
   puts-line "New Odoo installation detected"
-  puts-line "Fetching $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
-  puts-line "Fetching $COMPAT_REPO (${COMPAT_BRANCH}) @ (${COMPAT_COMMIT})"
   ODOO_ARCHIVE="$GITHUB_URL/$ODOO_REPO/archive/$ODOO_COMMIT.tar.gz"
-  COMPAT_ARCHIVE="$GITHUB_URL/$COMPAT_REPO/archive/$COMPAT_COMMIT.tar.gz"
 
-  mkdir ./odoo_tmp ./compat_tmp
+  mkdir ./odoo_tmp
+  puts-line "Fetching $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
   curl -sL $ODOO_ARCHIVE 2> /dev/null | tar xz -C ./odoo_tmp --strip 1
-  curl -sL $COMPAT_ARCHIVE 2> /dev/null | tar xz -C ./compat_tmp --strip 1
 
-  puts-step "Installing Odoo"
-  puts-line "Applying Odooku patches"
-  cp -a ./compat_tmp/patch/. ./odoo_tmp/
-  if [ -d "./patch" ]; then
-    puts-line "Applying patches in ./patch"
-    cp -a ./patch/. ./odoo_tmp/
-  fi
-
-  puts-line "Running Odooku runtime setup.py"
-  pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./compat_tmp/runtime 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
   puts-line "Running Odoo setup.py"
   pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
-  rm -rf .heroku/odoo/addons .heroku/odoo/compat_addons &> /dev/null || true
+  rm -rf .heroku/odoo/addons &> /dev/null || true
   mv ./odoo_tmp/addons .heroku/odoo/addons
-  mv ./compat_tmp/addons .heroku/odoo/compat_addons
 
   # Keep stack
-  mkdir -p .heroku/odoo/stack
-  echo $STACK > .heroku/odoo/stack/odooku.json
-
-  # Move over requirements, unless they are already provided by the app
-  if [ ! -f "./compat_requirements.txt" ]; then
-    cp ./compat_tmp/requirements.txt ./compat_requirements.txt
-  else
-    puts-line "Detected custom compat_requirements.txt"
-  fi
+  echo $STACK > .heroku/odoo/stack.json
 
   if [ ! -f "./odoo_requirements.txt" ]; then
     cp ./odoo_tmp/requirements.txt ./odoo_requirements.txt
@@ -73,16 +41,18 @@ if [ ! -f ".heroku/odoo/stack/odooku.json" ] || [ `echo $STACK | $JQ -cS .` != `
   fi
 
   # Cleanup
-  rm -rf ./odoo_tmp ./compat_tmp
+  rm -rf ./odoo_tmp
 else
   puts-line "Odoo installation is up to date"
 fi
 
 # Export additional requirements
-export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt compat_requirements.txt"
+export REQUIREMENTS="$REQUIREMENTS odoo_requirements.txt"
 
 # Export addon locations
-export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/openerp/addons,$HOME/.heroku/odoo/compat_addons,$HOME/.heroku/odoo/addons"
+export ODOOKU_ADDONS="$HOME/.heroku/odoo/lib/python2.7/site-packages/odoo/addons,$HOME/.heroku/odoo/addons"
 if [ -d "./addons" ]; then
-  export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons"
+  puts-line "Detected addons directory"
+  # add custom module paths here
+  export ODOOKU_ADDONS="$ODOOKU_ADDONS,$HOME/addons,$HOME/addons/vittal_odoo_modules"
 fi
