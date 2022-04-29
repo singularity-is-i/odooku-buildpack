@@ -62,7 +62,7 @@ export REQUIREMENTS="requirements.txt"
 pushd $BUILD_DIR > /dev/null
 
 # Install runtimes
-#source $LIB_DIR/steps/runtimes/python
+source $LIB_DIR/steps/runtimes/python
 
 # shebang for pip and other scripts point to:
 #!/app/.heroku/odoo//bin/python
