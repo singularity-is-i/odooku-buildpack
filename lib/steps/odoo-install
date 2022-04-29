@@ -46,7 +46,7 @@ if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS
   find . -name pip
 
   puts-line "Running Odoo setup.py"
-  pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
+  ./bin/pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
   rm -rf .heroku/odoo/addons &> /dev/null || true
   mv ./odoo_tmp/addons .heroku/odoo/addons
 
