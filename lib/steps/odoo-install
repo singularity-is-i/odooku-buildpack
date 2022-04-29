@@ -28,8 +28,8 @@ if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS
 
   puts-line "check python"
   python --version
-  put-line $PYTHONPATH
-  put-line $PYTHONHOME
+  puts-line $PYTHONPATH
+  puts-line $PYTHONHOME
   puts-line "Install pip"
   python get-pip.py
 
