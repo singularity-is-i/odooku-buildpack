@@ -5,14 +5,32 @@ ARCHIVE="https://www.python.org/ftp/python/2.7.17/Python-2.7.17.tgz"
 puts-line "Inside runtimes/python"
 
 
-if [ ! -f ".heroku/odoo/bin/python" ]; then
-  puts-step "Bootstrapping python"
-  mkdir -p .heroku/odoo
-  curl -s $ARCHIVE 2> /dev/null | tar zxv -C .heroku/odoo &> /dev/null
-  ls -la
-  pwd
-  puts-line "After curl python"
-  python --version
-  #python -m ensurepip --upgrade
-  #pip --version
-fi
+# if [ ! -f ".heroku/odoo/bin/python" ]; then
+#   puts-step "Bootstrapping python"
+#   mkdir -p .heroku/odoo
+#   curl -s $ARCHIVE 2> /dev/null | tar zxv -C .heroku/odoo &> /dev/null
+#   ls -la
+#   pwd
+#   puts-line "After curl python"
+#   python --version
+#   #python -m ensurepip --upgrade
+#   #pip --version
+# fi
+
+
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/odoo/
+
+OUT_PREFIX=$1
+
+PYTHON_VERSION=2.7.17
+
+echo "-----> Building Python ${PYTHON_VERSION}"
+curl -L https://python.org/ftp/python/2.7.17/Python-${PYTHON_VERSION}.tgz | tar xz
+pushd Python-${PYTHON_VERSION}
+./configure --prefix=${OUT_PREFIX}
+make -s
+make install -s
+popd
+
+PYTHONHOME=${OUT_PREFIX} ${OUT_PREFIX}/bin/python -m ensurepip
