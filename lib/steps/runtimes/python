@@ -13,6 +13,6 @@ if [ ! -f ".heroku/odoo/bin/python" ]; then
   pwd
   puts-line "After curl python"
   python --version
-  python -m ensurepip --upgrade
-  pip --version
+  #python -m ensurepip --upgrade
+  #pip --version
 fi
