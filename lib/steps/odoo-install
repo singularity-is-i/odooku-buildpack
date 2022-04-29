@@ -6,7 +6,8 @@ GITHUB_URL="https://github.com"
 ODOO_REPO=`$JQ -r .odoo.repo ./odooku.json`
 ODOO_BRANCH=`$JQ -r .odoo.branch ./odooku.json`
 ODOO_COMMIT=`$JQ -r .odoo.commit ./odooku.json`
-PYTHONHOME=".heroku/python/lib/python2.7"
+PYTHONHOME="/app/.heroku/python/lib/python2.7"
+PYTHONPATH="/app/.heroku/python/lib/python2.7"
 
 if [ $ODOO_COMMIT == "null" ]; then
   # Grab latest commit from github api
