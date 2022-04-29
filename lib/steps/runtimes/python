@@ -2,8 +2,12 @@
 #ARCHIVE="https://odooku.s3.amazonaws.com/runtimes/python-2.7.12.tar.gz"
 ARCHIVE="https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz"
 
+puts-line "Inside runtimes/python"
+
+
 if [ ! -f ".heroku/odoo/bin/python" ]; then
   puts-step "Bootstrapping python"
   mkdir -p .heroku/odoo
   curl -s $ARCHIVE 2> /dev/null | tar zxv -C .heroku/odoo &> /dev/null
+  puts-line "After curl python"
 fi
