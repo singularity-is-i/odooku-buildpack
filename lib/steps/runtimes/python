@@ -14,4 +14,5 @@ if [ ! -f ".heroku/odoo/bin/python" ]; then
   puts-line "After curl python"
   python --version
   python -m ensurepip --upgrade
+  pip --version
 fi
