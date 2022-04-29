@@ -37,6 +37,10 @@ puts-line "Inside runtimes/python"
 
 puts-step "Bootstrapping python - pip"
 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+python -m get-pip.py
 
 puts-step "Proof PIP"
 find . -name pip
+
+puts-step "pip version"
+pip --version
