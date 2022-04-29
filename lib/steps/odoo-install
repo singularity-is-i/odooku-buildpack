@@ -46,6 +46,7 @@ if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS
 
   puts-line "find pip"
   find . -name pip
+  puts-line "pip version"
   pip --version
 
   puts-line "Running Odoo setup.py"
