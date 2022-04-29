@@ -47,7 +47,7 @@ if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS
   puts-line "find pip"
   find . -name pip
   puts-line "pip version"
-  pip --version
+  python -m pip --version
 
   puts-line "Running Odoo setup.py"
   pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
