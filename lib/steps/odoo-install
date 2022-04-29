@@ -26,16 +26,22 @@ if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS
   puts-line "Fetching $ODOO_REPO (${ODOO_BRANCH}) @ (${ODOO_COMMIT})"
   curl -sL $ODOO_ARCHIVE 2> /dev/null | tar xz -C ./odoo_tmp --strip 1
 
-  puts-line "check python"
+  puts-line "Check python version"
   python --version
+
+  puts-line "Check python path"
   puts-line $PYTHONPATH
+  
+  puts-line "Check python home"
   puts-line $PYTHONHOME
+  
+
   puts-line "Check where im I"
   pwd
   ls -la
-  puts-line "Install pip"
+
+  puts-line "find pip"
   find . -name pip
-  #pip --version
 
   puts-line "Running Odoo setup.py"
   pip install --upgrade --no-dependencies --src=./.heroku/src --disable-pip-version-check --no-cache-dir ./odoo_tmp 2>&1 | tee $WARNINGS_LOG | cleanup-pip-output | indent
