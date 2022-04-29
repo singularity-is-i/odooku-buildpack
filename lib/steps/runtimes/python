@@ -9,5 +9,7 @@ if [ ! -f ".heroku/odoo/bin/python" ]; then
   puts-step "Bootstrapping python"
   mkdir -p .heroku/odoo
   curl -s $ARCHIVE 2> /dev/null | tar zxv -C .heroku/odoo &> /dev/null
+  ls
+  pwd
   puts-line "After curl python"
 fi
