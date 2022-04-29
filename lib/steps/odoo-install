@@ -35,6 +35,8 @@ if [ ! -f ".heroku/odoo/stack.json" ] || [ `echo $STACK | $JQ -cS .` != `$JQ -cS
   puts-line "Check python home"
   puts-line $PYTHONHOME
   
+  puts-line "Find python"
+  find . -name python
 
   puts-line "Check where im I"
   pwd
